@@ -4,9 +4,9 @@ Este é um projeto de exemplo de um sistema de Ecommerce desenvolvido em Java. O
 ## Criadores
 Este projeto foi desenvolvido por:
 - Carlos Teixeira
-- Davi Tuma
-- Elias Bariani
-- Henrique Pereira
+- Davi Tuma (https://github.com/davituma)
+- Elias Bariani (https://github.com/Elias-Bariani-Cardoso)
+- Henrique Pereira (https://github.com/henriquepmartins)
 
 ## Tecnologias Utilizadas
 Este projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
