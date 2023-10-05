@@ -49,16 +49,41 @@ public class Produto {
     public void cadastrarProduto() {
         String nomeProduto = JOptionPane.showInputDialog("Informe o nome do produto:");
         Produto existeProd = encontrarProdutoNoEstoque(nomeProduto);
+        
         if (existeProd != null) {
             adicionarQuantidade(nomeProduto);
         } else {
-            double precoProduto = Double.parseDouble(JOptionPane.showInputDialog("Informe o preço do produto:"));
-            int quantidadeProduto = Integer.parseInt(JOptionPane.showInputDialog("Informe a quantidade do produto:"));
+            double precoProduto = 0;
+            int quantidadeProduto = 0;
+            boolean inputValidoPreco = false;
+            boolean inputValidoQuant = false;
+    
+            while (!inputValidoPreco) {
+                try {
+                    String precoStr = JOptionPane.showInputDialog("Informe o preço do produto:");
+                    precoProduto = Double.parseDouble(precoStr);
+                    inputValidoPreco = true;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para preço.");
+                }
+            }
+
+            while (!inputValidoQuant) {
+                try {
+                    String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade do produto:");
+                    quantidadeProduto = Integer.parseInt(quantidadeStr);
+                    inputValidoQuant= true;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para quantidade.");
+                }
+            }
+    
             Produto novoProduto = new Produto(nomeProduto, precoProduto, quantidadeProduto);
             estoque.adicionarProduto(novoProduto);
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
         }
     }
+    
     // Metodo para verificar se o produto esa no estoque
     private Produto encontrarProdutoNoEstoque(String nomeProduto) {
         for (Produto p : estoque.listarProdutos()) {

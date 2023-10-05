@@ -40,14 +40,28 @@ public class Cliente {
     // Funcionalidade: Cadastrar novo cliente
     public void cadastrarCliente() {
         String nome = JOptionPane.showInputDialog("Informe o nome do cliente:");
-        int telefone = Integer.parseInt(JOptionPane.showInputDialog("Informe o telefone do cliente:"));
+        int telefone = 0;
+        boolean inputValido = false;
+    
+        while (!inputValido) {
+            try {
+                String telefoneStr = JOptionPane.showInputDialog("Informe o telefone do cliente:");
+                telefone = Integer.parseInt(telefoneStr);
+                inputValido = true;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para o telefone.");
+            }
+        }
+    
         Cliente novoCliente = new Cliente(nome, telefone);
         checkCliente(nome, telefone);
+        
         if (!clienteJaCadastrado) {
             listaDeClientes.add(novoCliente);
             JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
         }
     }
+    
 
     // Funcionalidade: Exibir todos os clientes cadastrados
     public void verClientes() {
