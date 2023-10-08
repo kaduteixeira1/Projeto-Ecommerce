@@ -70,7 +70,7 @@ public class Produto {
 
             while (!inputValidoQuant) {
                 try {
-                    String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade do produto:");
+                     String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade do produto:");
                     quantidadeProduto = Integer.parseInt(quantidadeStr);
                     inputValidoQuant= true;
                 } catch (NumberFormatException e) {
