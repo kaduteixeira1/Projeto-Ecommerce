@@ -47,9 +47,15 @@ public class Produto {
 
     // Metodo para cadastrar um novo produto
     public void cadastrarProduto() {
-        String nomeProduto = JOptionPane.showInputDialog("Informe o nome do produto:");
+        String nomeProduto = JOptionPane.showInputDialog("Digite o nome do produto:");
+
+        if (nomeProduto == null || nomeProduto.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nome do produto inválido. Por favor, tente novamente.");
+            return; 
+        }
+    
         Produto existeProd = encontrarProdutoNoEstoque(nomeProduto);
-        
+    
         if (existeProd != null) {
             adicionarQuantidade(nomeProduto);
         } else {
@@ -58,6 +64,7 @@ public class Produto {
             boolean inputValidoPreco = false;
             boolean inputValidoQuant = false;
     
+            // Obtém e valida o preço do produto
             while (!inputValidoPreco) {
                 try {
                     String precoStr = JOptionPane.showInputDialog("Informe o preço do produto:");
@@ -67,17 +74,19 @@ public class Produto {
                     JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para preço.");
                 }
             }
-
+    
+            // Obtém e valida a quantidade do produto
             while (!inputValidoQuant) {
                 try {
-                     String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade do produto:");
+                    String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade do produto:");
                     quantidadeProduto = Integer.parseInt(quantidadeStr);
-                    inputValidoQuant= true;
+                    inputValidoQuant = true;
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para quantidade.");
                 }
             }
     
+            // Cria um novo produto e o adiciona ao estoque
             Produto novoProduto = new Produto(nomeProduto, precoProduto, quantidadeProduto);
             estoque.adicionarProduto(novoProduto);
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
