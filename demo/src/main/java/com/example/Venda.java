@@ -38,16 +38,20 @@ public class Venda extends Produto {
     // Método para vender um produto
     public void venderProduto() {
         String nomeProduto = JOptionPane.showInputDialog("Informe o nome do produto a ser vendido:");
-        quantidadeVendida = Integer.parseInt(JOptionPane.showInputDialog("Informe a quantidade vendida:"));
-
         Produto produtoVendido = encontrarProdutoNoEstoque(nomeProduto);
+        boolean inputValidoPreco = false;
 
         if (produtoVendido != null) {
-            if (produtoVendido.getQuantidade() >= quantidadeVendida) {
-                String resultadoVenda = addVendaELucro(produtoVendido);
-                JOptionPane.showMessageDialog(null, resultadoVenda);
-            } else {
-                JOptionPane.showMessageDialog(null, "Quantidade insuficiente em estoque.");
+            while (!inputValidoPreco) {
+                try {
+                    String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade vendida:");
+                    quantidadeVendida = Integer.parseInt(quantidadeStr);
+                    String resultadoVenda = addVendaELucro(produtoVendido);
+                    JOptionPane.showMessageDialog(null, resultadoVenda);
+                    inputValidoPreco = true;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira apenas números para quantidade vendida.");
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "Produto não encontrado.");
