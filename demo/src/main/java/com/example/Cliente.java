@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 public class Cliente {
     private String nome;
     private int telefone;
-    private boolean clienteJaCadastrado = false;
     static List<Cliente> listaDeClientes = new ArrayList<>();
 
     // Construtor com parâmetros
@@ -40,12 +39,23 @@ public class Cliente {
     // Funcionalidade: Cadastrar novo cliente
     public void cadastrarCliente() {
         String nome = JOptionPane.showInputDialog("Informe o nome do cliente:");
+    
+        if (nome == null || nome.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Operação cancelada");
+            return;
+        }
+    
         int telefone = 0;
         boolean inputValido = false;
     
+        // Obtém e valida o número de telefone do cliente
         while (!inputValido) {
             try {
                 String telefoneStr = JOptionPane.showInputDialog("Informe o telefone do cliente:");
+                if (telefoneStr == null) {
+                    JOptionPane.showMessageDialog(null, "Operação cancelada");
+                    return;
+                }
                 telefone = Integer.parseInt(telefoneStr);
                 inputValido = true;
             } catch (NumberFormatException e) {
@@ -53,14 +63,26 @@ public class Cliente {
             }
         }
     
+        // Cria um novo cliente e verifica se já está cadastrado
         Cliente novoCliente = new Cliente(nome, telefone);
-        checkCliente(nome, telefone);
-        
-        if (!clienteJaCadastrado) {
+        if (!checkCliente(nome, telefone)) {
             listaDeClientes.add(novoCliente);
             JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Cliente já cadastrado!");
         }
     }
+    
+    // Método para verificar se o cliente já está cadastrado
+    public boolean checkCliente(String nome, int telefone) {
+        for (Cliente cliente : listaDeClientes) {
+            if (cliente.getNome().equals(nome) && cliente.getTelefone() == telefone) {
+                return true;
+            }
+        }     
+        return false;
+    }
+    
     
 
     // Funcionalidade: Exibir todos os clientes cadastrados
@@ -71,22 +93,5 @@ public class Cliente {
                     .append("\n");
         }
         JOptionPane.showMessageDialog(null, "Clientes:\n" + clientesStr.toString());
-    }
-
-    // Funcionalidade: Verificar se um cliente já está cadastrado
-    public void checkCliente(String nome, int telefone) {
-        for (Cliente c : listaDeClientes) {
-            if (c.getNome().equalsIgnoreCase(nome) && c.getTelefone() == telefone) {
-                clienteJaCadastrado = true;
-                JOptionPane.showMessageDialog(null, "Cliente já cadastrado.");
-                break;
-            }
-            if (c.getTelefone() == telefone) {
-                clienteJaCadastrado = true;
-                JOptionPane.showMessageDialog(null, "Número já cadastrado.");
-                break;
-            }
-            clienteJaCadastrado = false;
-        }
     }
 }

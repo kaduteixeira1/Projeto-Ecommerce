@@ -35,16 +35,28 @@ public class Venda extends Produto {
         this.produto = produto;
     }
 
-    // Método para vender um produto
     public void venderProduto() {
         String nomeProduto = JOptionPane.showInputDialog("Informe o nome do produto a ser vendido:");
+    
+        if (nomeProduto == null || nomeProduto.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Operação cancelada");
+            return;
+        }
+    
         Produto produtoVendido = encontrarProdutoNoEstoque(nomeProduto);
         boolean inputValidoPreco = false;
-
+    
         if (produtoVendido != null) {
+         
+    
+            // Obtém e valida a quantidade vendida
             while (!inputValidoPreco) {
                 try {
                     String quantidadeStr = JOptionPane.showInputDialog("Informe a quantidade vendida:");
+                    if (quantidadeStr == null) {
+                        JOptionPane.showMessageDialog(null, "Operação cancelada");
+                        return;
+                    }
                     quantidadeVendida = Integer.parseInt(quantidadeStr);
                     String resultadoVenda = addVendaELucro(produtoVendido);
                     JOptionPane.showMessageDialog(null, resultadoVenda);
@@ -56,6 +68,33 @@ public class Venda extends Produto {
         } else {
             JOptionPane.showMessageDialog(null, "Produto não encontrado.");
         }
+    }
+    
+
+    // Método auxiliar para adicionar uma venda e calcular o lucro ao estoque
+    private String addVendaELucro(Produto produto) {
+        produto.setQuantidade(produto.getQuantidade() - quantidadeVendida);
+        double precoUnitario = produto.getPreco();
+        double lucroVenda = precoUnitario * quantidadeVendida;
+        lucroBruto.add(lucroVenda);
+
+        DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("d MMM uuuu");
+        String horaFormatada = horaAtual.format(formatterHora);
+        String dataFormatada = dataAtual.format(formatterDate);
+        StringBuilder vendaStr = new StringBuilder();
+
+        vendaStr.append("*************************\n")
+                .append("Venda realizada! \n")
+                .append(quantidadeVendida)
+                .append(" unidades de ")
+                .append(produto.getNome() + "\n")
+                .append(dataFormatada + " às " + horaFormatada)
+                .append("\n*************************");
+
+        String venda = vendaStr.toString();
+        historicoVendas.add(venda);
+        return venda;
     }
 
     // Método para encontrar um produto no estoque
@@ -86,30 +125,5 @@ public class Venda extends Produto {
         return lucroTotal;
     }
 
-    // Método auxiliar para adicionar uma venda e calcular o lucro ao estoque
-    private String addVendaELucro(Produto produto) {
-        produto.setQuantidade(produto.getQuantidade() - quantidadeVendida);
-        double precoUnitario = produto.getPreco();
-        double lucroVenda = precoUnitario * quantidadeVendida;
-        lucroBruto.add(lucroVenda);
-
-        DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("d MMM uuuu");
-        String horaFormatada = horaAtual.format(formatterHora);
-        String dataFormatada = dataAtual.format(formatterDate);
-        StringBuilder vendaStr = new StringBuilder();
-
-        vendaStr.append("*************************\n")
-                .append("Venda realizada! \n")
-                .append(quantidadeVendida)
-                .append(" unidades de ")
-                .append(produto.getNome() + "\n")
-                .append(dataFormatada + " às " + horaFormatada)
-                .append("\n*************************");
-
-        String venda = vendaStr.toString();
-        historicoVendas.add(venda);
-        return venda;
-    }
 
 }
